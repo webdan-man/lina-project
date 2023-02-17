@@ -34,12 +34,14 @@ const Storage = (props) => {
     {
       title: 'Cost',
       dataIndex: 'cost',
-      editable: true
+      editable: true,
+      render: (cost) => `${cost} грн`
     },
     {
       title: 'Price',
       dataIndex: 'price',
-      editable: true
+      editable: true,
+      render: (price) => `${price} грн`
     },
     {
       title: 'Link',

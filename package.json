@@ -1,18 +1,20 @@
 {
   "name": "lina-project",
   "version": "0.1.0",
-  "productName": "Stickers and HairBands Shop",
+  "productName": "Stickers-and-HairBands-Shop",
   "main": "public/electron.js",
   "private": true,
   "homepage": "",
   "dependencies": {
     "@craco/craco": "^7.0.0",
+    "@react-pdf/renderer": "^3.1.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.2.0",
     "antd-img-crop": "^4.6.0",
     "babel-preset-react-app": "^10.0.1",
+    "dayjs": "^1.11.7",
     "dexie": "^3.2.3",
     "dexie-react-hooks": "^1.1.1",
     "instagram-profile-get": "^1.0.3",
@@ -71,19 +73,19 @@
     "mac": {
       "publish": {
         "provider": "github",
-        "owner": "Github",
-        "repo": "Repository Name",
+        "owner": "webdan-man",
+        "repo": "lina-project",
         "private": true,
-        "token": ""
+        "token": "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"
       }
     },
     "win": {
       "publish": {
         "provider": "github",
-        "owner": "Github",
-        "repo": "Repository Name",
+        "owner": "webdan-man",
+        "repo": "lina-project",
         "private": true,
-        "token": "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"
+        "token": "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"
       }
     },
     "files": [
@@ -93,7 +95,7 @@
     "publish": {
       "provider": "github",
       "private": true,
-      "owner": "Github"
+      "owner": "webdan-man"
     }
   }
 }

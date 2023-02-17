@@ -15,37 +15,44 @@ const Order = (props) => {
       editable: true
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      editable: true
-    },
-    {
       title: 'Products',
       dataIndex: 'products',
-      render: (products) => (
-        <Space split=",">
-          {products.map((product) => {
-            const item = props.storage.find((p) => p.id === product['first']);
+      render: (products) => {
+        if (!products) return <MinusOutlined />;
+        return (
+          <Space split=",">
+            {products.map((product) => {
+              const item = props.storage.find((item) => item.id === product.id);
 
-            if (!item) return <MinusOutlined />;
+              if (!item) return <MinusOutlined />;
 
-            return (
-              <Tooltip title={`На складі ${item.number}`}>
-                <span
-                  style={{
-                    cursor: 'pointer'
-                  }}>{`${item.name} (${product['number']})`}</span>
-              </Tooltip>
-            );
-          })}
-        </Space>
-      )
+              return (
+                <Tooltip title={`На складі ${item.number}`}>
+                  <span
+                    style={{
+                      cursor: 'pointer'
+                    }}>{`${item.name} (${product['number']})`}</span>
+                </Tooltip>
+              );
+            })}
+          </Space>
+        );
+      }
     },
     {
       title: 'Payment',
       dataIndex: 'payment',
       render: (payment, record) =>
         payment + (record.paymentValue ? ` (${record.paymentValue})` : '')
+    },
+    {
+      title: 'Order Date',
+      dataIndex: 'orderDate'
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      editable: true
     },
     {
       title: 'Actions',
@@ -68,6 +75,7 @@ const Order = (props) => {
       defaultColumns={defaultColumns}
       addButton={() => <AddButton />}
       handleSave={handleSave}
+      downloadButton={true}
     />
   );
 };

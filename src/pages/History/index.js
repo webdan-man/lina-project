@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Image, Modal } from 'antd';
 import NewTable from '../../components/NewTable';
-import { UploadOutlined } from '@ant-design/icons';
+import { MinusOutlined, UploadOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { withContext } from '../../contexts/projectContext';
 import { db } from '../../db';
 
 const History = (props) => {
-  console.log('here props', props);
   const restore = async (record) => {
     const restoreItem = { ...record };
 
@@ -37,8 +36,16 @@ const History = (props) => {
     {
       title: 'Products',
       dataIndex: 'products',
-      render: (products) =>
-        products.map((product) => `${product.first} (${product.number})`).join(', ')
+      render: (products) => {
+        if (!products) return <MinusOutlined />;
+
+        return products
+          .map(
+            (product) =>
+              `${props.storage.find((item) => item.id === product.id)?.name} (${product.number})`
+          )
+          .join(', ');
+      }
     },
     {
       title: 'Payment',
@@ -53,7 +60,9 @@ const History = (props) => {
     },
     {
       title: 'Confirm description',
-      dataIndex: 'confirmDescription'
+      dataIndex: 'confirmDescription',
+      render: (confirmDescription) =>
+        confirmDescription || <CheckCircleOutlined style={{ color: '#3f8600', fontSize: 20 }} />
     },
     {
       title: 'Actions',

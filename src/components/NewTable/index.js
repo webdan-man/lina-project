@@ -1,8 +1,22 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Form, Input, Table } from 'antd';
+import { Form, Input, Table, Button } from 'antd';
 import PropTypes from 'prop-types';
 const EditableContext = React.createContext(null);
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, PrinterOutlined } from '@ant-design/icons';
+import { PDFDownloadLink, Document, Page, Text, View, Font, StyleSheet } from '@react-pdf/renderer';
+import { withContext } from '../../contexts/projectContext';
+
+Font.register({
+  family: 'Roboto',
+  src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf'
+});
+
+const styles = StyleSheet.create({
+  myText: {
+    fontFamily: 'Roboto',
+    fontSize: 12
+  }
+});
 
 const EditableRow = ({ ...props }) => {
   const [form] = Form.useForm();
@@ -90,7 +104,46 @@ EditableCell.propTypes = {
   handleSave: PropTypes.func
 };
 
-const NewTable = ({ dataSource, defaultColumns = [], history = false, addButton, handleSave }) => {
+const MyDoc = ({ data }) => {
+  console.log('here data', data);
+  return (
+    <Document styles={styles}>
+      <Page>
+        {data.map((row) => (
+          <View style={styles.myText}>
+            <Text>Customer: {row.customer}</Text>
+            <Text>Description: {row.description}</Text>
+            <Text>
+              Payment: {row.payment} {row.paymentValue}
+            </Text>
+            <Text> </Text>
+          </View>
+        ))}
+      </Page>
+    </Document>
+  );
+};
+
+const NewTable = ({
+  dataSource,
+  defaultColumns = [],
+  history = false,
+  addButton,
+  handleSave,
+  downloadButton = false,
+  ...props
+}) => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+    setSelectedRows(props.orders.filter((order) => newSelectedRowKeys.includes(order.key)));
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange
+  };
+  const hasSelected = selectedRowKeys.length > 0;
   const components = {
     body: {
       row: EditableRow,
@@ -127,7 +180,29 @@ const NewTable = ({ dataSource, defaultColumns = [], history = false, addButton,
         rowClassName={() => 'editable-row'}
         dataSource={dataSource}
         columns={columns}
+        rowSelection={downloadButton ? rowSelection : null}
+        // size={'middle'}
       />
+      {downloadButton && (
+        <PDFDownloadLink
+          document={<MyDoc data={selectedRows} />}
+          fileName="orders.pdf"
+          onClick={(e) => {
+            if (!hasSelected) {
+              e.preventDefault();
+            }
+          }}>
+          {({ blob, url, loading, error }) =>
+            loading ? (
+              'Loading document...'
+            ) : (
+              <Button type="primary" icon={<PrinterOutlined />} disabled={!hasSelected}>
+                Download PDF
+              </Button>
+            )
+          }
+        </PDFDownloadLink>
+      )}
     </div>
   );
 };
@@ -140,4 +215,4 @@ NewTable.propTypes = {
   addButton: PropTypes.func
 };
 
-export default NewTable;
+export default withContext(NewTable);

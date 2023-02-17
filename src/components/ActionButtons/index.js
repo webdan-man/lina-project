@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Dropdown, Form, Image, Input, Modal, Upload } from 'antd';
-import { CheckOutlined, CopyOutlined, DeleteOutlined, EllipsisOutlined } from '@ant-design/icons';
+import {
+  CheckOutlined,
+  CopyOutlined,
+  DeleteOutlined,
+  MenuOutlined,
+  PrinterOutlined
+} from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import { withContext } from '../../contexts/projectContext';
 import { db } from '../../db';
@@ -176,7 +182,7 @@ const ActionButtons = ({ record, type, confirmButton = false, ...props }) => {
 
   return (
     <Dropdown menu={{ items }} trigger={['click']}>
-      <EllipsisOutlined />
+      <MenuOutlined />
     </Dropdown>
   );
 };
