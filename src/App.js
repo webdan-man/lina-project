@@ -87,7 +87,7 @@ const App = () => {
             marginLeft: 200
           }}>
           <Header>Header</Header>
-          <Content style={{ height: 'calc(100vh - 129px)', padding: 24 }}>
+          <Content style={{ minHeight: 'calc(100vh - 129px)', padding: 24 }}>
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/storage" element={<Storage />} />
