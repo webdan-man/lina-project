@@ -96,7 +96,7 @@ const Dashboard = (props) => {
         ),
       0
     );
-  }, [props.storage]);
+  }, [props.storage, props.orders]);
 
   const totalOrdersProfit = useMemo(() => {
     const totalOrdersPrice = props.orders.reduce(
@@ -113,69 +113,142 @@ const Dashboard = (props) => {
     );
 
     return totalOrdersPrice - totalOrdersCost;
-  }, [props.storage, totalOrdersCost]);
+  }, [props.orders, props.storage, totalOrdersCost]);
+
+  const totalDoneOrdersCost = useMemo(
+    () =>
+      props.archiveOrders.reduce(
+        (ordersSum, order) =>
+          ordersSum +
+          order.products.reduce(
+            (productsSum, product) =>
+              productsSum +
+              (props.storage.find((item) => item.id === product.id)?.cost || 0) *
+                (product.number || 0),
+            0
+          ),
+        0
+      ),
+    [props.archiveOrders, props.storage]
+  );
+
+  const totalDoneProfit = useMemo(() => {
+    const totalDoneOrdersPrice = props.archiveOrders.reduce(
+      (ordersSum, order) =>
+        ordersSum +
+        order.products.reduce(
+          (productsSum, product) =>
+            productsSum +
+            (props.storage.find((item) => item.id === product.id)?.price || 0) *
+              (product.number || 0),
+          0
+        ),
+      0
+    );
+
+    return totalDoneOrdersPrice - totalDoneOrdersCost;
+  }, [props.archiveOrders, props.storage, totalDoneOrdersCost]);
+
+  const sortedProducts = useMemo(
+    () =>
+      props.orders
+        .map((order) => order.products)
+        .flat()
+        .reduce((sum, product) => {
+          sum[product.id] = {
+            number: (sum[product.id] ? sum[product.id].number : 0) + product.number,
+            amount: (sum[product.id] ? sum[product.id].amount : 0) + 1
+          };
+
+          return sum;
+        }, {}),
+    [props.orders]
+  );
+
+  const sortingProducts = useMemo(
+    () =>
+      props.storage.sort((a, b) => {
+        const productA = sortedProducts[a.id]?.number || 0;
+        const productB = sortedProducts[b.id]?.number || 0;
+        if (productA > productB) {
+          return -1;
+        }
+        if (productA < productB) {
+          return 1;
+        }
+
+        return 0;
+      }),
+    [props.storage]
+  );
 
   return (
     <Space direction={'vertical'} style={{ width: '100%' }}>
-      <Row gutter={16}>
-        <Col span={16}>
-          <Card bordered={false}>
-            <Space split={<Divider type="vertical" />} wrap>
-              {props.storage.map((product) => (
+      <Card bordered={false} size={'small'}>
+        <Space split={<Divider type="vertical" />} wrap>
+          {sortingProducts.sort().map((product) => (
+            <Tooltip
+              color={'magenta'}
+              title={
                 <Space direction={'vertical'}>
-                  {/*<span>{product.name}</span>*/}
-                  <Badge count={product.number} showZero>
-                    <Image width={60} src={product.image} />
-                  </Badge>
+                  <span>{product.name}</span>
+                  <span>Всього замовлень: {sortedProducts[product.id]?.amount || 0} рази</span>
+                  <span>Замовлено всього: {sortedProducts[product.id]?.number || 0} штук</span>
                 </Space>
-              ))}
-            </Space>
-          </Card>
-        </Col>
-        <Col span={4}>
-          <Card bordered={false}>
-            <Statistic title="Total Cost" value={totalCost} suffix={`грн`} />
-          </Card>
-        </Col>
-        <Col span={4}>
-          <Card bordered={false}>
-            <Statistic
-              title="Profit"
-              value={profit}
-              suffix={`грн`}
-              valueStyle={{ color: '#3f8600' }}
-              prefix={<ArrowUpOutlined />}
-            />
-          </Card>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={16}>
-          <Card bordered={false}>
-            <Statistic
-              title="Active Orders"
-              value={props.orders.length}
-              // suffix={`/ ${props.allOrders.length}`}
-            />
-          </Card>
-        </Col>
-        <Col span={4}>
-          <Card bordered={false}>
-            <Statistic title="Total Orders Cost" value={totalOrdersCost} suffix={`грн`} />
-          </Card>
-        </Col>
-        <Col span={4}>
-          <Card bordered={false}>
-            <Statistic
-              title="Total Orders Profit"
-              value={totalOrdersProfit}
-              suffix={`грн`}
-              valueStyle={{ color: '#3f8600' }}
-              prefix={<ArrowUpOutlined />}
-            />
-          </Card>
-        </Col>
-      </Row>
+              }>
+              <Space direction={'vertical'}>
+                <Badge count={product.number} showZero>
+                  <Image width={60} height={60} src={product.image} />
+                </Badge>
+              </Space>
+            </Tooltip>
+          ))}
+        </Space>
+      </Card>
+      <Space wrap={true}>
+        <Card bordered={false} size={'small'}>
+          <Statistic title="Total Storage Cost" value={totalCost} suffix={`грн`} />
+        </Card>
+        <Card bordered={false} size={'small'}>
+          <Statistic
+            title="Storage Profit"
+            value={profit}
+            suffix={`грн`}
+            valueStyle={{ color: '#3f8600' }}
+            prefix={<ArrowUpOutlined />}
+          />
+        </Card>
+        <Card bordered={false} size={'small'}>
+          <Statistic title="Active Orders" value={props.orders.length} />
+        </Card>
+        <Card bordered={false} size={'small'}>
+          <Statistic title="Total Active Orders Cost" value={totalOrdersCost} suffix={`грн`} />
+        </Card>
+        <Card bordered={false} size={'small'}>
+          <Statistic
+            title="Total Active Orders Profit"
+            value={totalOrdersProfit}
+            suffix={`грн`}
+            valueStyle={{ color: '#3f8600' }}
+            prefix={<ArrowUpOutlined />}
+          />
+        </Card>
+        <Card bordered={false} size={'small'}>
+          <Statistic title="Total Done Orders" value={props.archiveOrders.length} />
+        </Card>
+        <Card bordered={false} size={'small'}>
+          <Statistic title="Total Done Orders Cost" value={totalDoneOrdersCost} suffix={`грн`} />
+        </Card>
+        <Card bordered={false} size={'small'}>
+          <Statistic
+            title="Total Done Profit"
+            value={totalDoneProfit}
+            suffix={`грн`}
+            valueStyle={{ color: '#3f8600' }}
+            prefix={<ArrowUpOutlined />}
+          />
+        </Card>
+      </Space>
       <Calendar
         dateCellRender={dateCellRender}
         // monthCellRender={monthCellRender}

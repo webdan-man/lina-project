@@ -6,6 +6,7 @@ import { withContext } from '../../contexts/projectContext';
 import { Space, Tooltip } from 'antd';
 import { db } from '../../db';
 import { MinusOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 const Order = (props) => {
   const defaultColumns = [
@@ -47,7 +48,8 @@ const Order = (props) => {
     },
     {
       title: 'Order Date',
-      dataIndex: 'orderDate'
+      dataIndex: 'orderDate',
+      sorter: (a, b) => dayjs(a.orderDate).isAfter(b.orderDate, 'day')
     },
     {
       title: 'Description',

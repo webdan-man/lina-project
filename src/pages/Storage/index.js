@@ -14,7 +14,7 @@ const Storage = (props) => {
     {
       title: 'Image',
       dataIndex: 'image',
-      render: (src) => <Image width={60} src={src} />
+      render: (src) => <Image width={60} height={60} src={src} />
     },
     {
       title: 'Name',

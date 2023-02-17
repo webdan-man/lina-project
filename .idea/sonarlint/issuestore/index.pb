@@ -21,17 +21,12 @@ A
 package-lock.json,f/a/fa288d1472d29beccb489a676f68739ad365fc47
 Q
 !src/components/NewTable/index.css,f/9/f99e49d3a8d22e2d2da66f2a2e5118e12c9fe14b
-;
-src/App.css,a/a/aa7165aefcf8ee3d73539e99ab007daf1aa18d8d
 <
 .eslintrc.js,d/b/dbc0c31823b8f2e4ed04a397722fed33a67f123f
 ?
 craco.config.js,d/c/dc8684dd9b1371aee46724f40001122dc551e063
 T
 $src/pages/Storage/AddButton/index.js,1/e/1ea6b5e5eda89b4d7e047b920acadbb2fe335f49
-:
-
-src/App.js,1/e/1e43fa63aecd2127be034b3fb9d4caa172275714
 <
 src/index.js,f/9/f900edc44cb929c2267a16100a32851f6d5b477d
 B

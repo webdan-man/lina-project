@@ -181,7 +181,8 @@ const NewTable = ({
         dataSource={dataSource}
         columns={columns}
         rowSelection={downloadButton ? rowSelection : null}
-        // size={'middle'}
+        size={'middle'}
+        bordered={true}
       />
       {downloadButton && (
         <PDFDownloadLink

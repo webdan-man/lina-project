@@ -106,7 +106,7 @@ const CollectionCreateForm = withContext(({ open, onCreate, onCancel, ...props }
                         allowClear>
                         {filterStorage.map((product) => (
                           <Option
-                            disabled={product.disabled}
+                            disabled={product.disabled || !product.number}
                             value={product.id}
                             label={product.name}>
                             <Space>

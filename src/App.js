@@ -9,6 +9,7 @@ import {
   ShoppingCartOutlined,
   HistoryOutlined
 } from '@ant-design/icons';
+
 import Dashboard from './pages/Dashboard';
 import Storage from './pages/Storage';
 import Order from './pages/Order';
