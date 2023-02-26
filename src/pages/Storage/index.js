@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NewTable from '../../components/NewTable';
 import { Image, Typography } from 'antd';
 import AddButton from './AddButton';
@@ -6,6 +6,7 @@ import ActionButtons from '../../components/ActionButtons';
 import { withContext } from '../../contexts/projectContext';
 import { db } from '../../db';
 import { MinusOutlined } from '@ant-design/icons';
+import IamgeGalery from '../../components/IamgeGalery';
 
 const { Link } = Typography;
 
@@ -13,8 +14,8 @@ const Storage = (props) => {
   const defaultColumns = [
     {
       title: 'Image',
-      dataIndex: 'image',
-      render: (src) => <Image width={60} height={60} src={src} />
+      dataIndex: 'images',
+      render: (images) => <IamgeGalery images={images} />
     },
     {
       title: 'Name',

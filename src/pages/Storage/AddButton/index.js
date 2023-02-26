@@ -40,6 +40,7 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
   return (
     <Modal
       open={open}
+      destroyOnClose={true}
       title="Add new product"
       okText="Add"
       cancelText="Cancel"
@@ -63,14 +64,14 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
           modifier: 'public'
         }}>
         <Form.Item label="Image">
-          <Form.Item name="image" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
+          <Form.Item name="images" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
             <Upload.Dragger
               name="files"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
               listType="picture-card"
               fileList={fileList}
               onChange={onChange}
-              onPreview={onPreview}>
+              onPreview={onPreview}
+              multiple={true}>
               {fileList.length < 5 && '+ Upload'}
             </Upload.Dragger>
           </Form.Item>
@@ -106,15 +107,20 @@ CollectionCreateForm.propTypes = {
 
 const AddButton = () => {
   const handleAdd = async (data) => {
-    const file = data.image[0];
+    const file = data.images;
 
-    const src = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file.originFileObj);
-      reader.onload = () => resolve(reader.result);
-    });
+    const images = await Promise.all(
+      data.images.map(
+        (file) =>
+          new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file.originFileObj);
+            reader.onload = () => resolve(reader.result);
+          })
+      )
+    );
 
-    await db.storage.add({ ...data, image: src });
+    await db.storage.add({ ...data, images: images });
   };
   const [open, setOpen] = useState(false);
   const onCreate = (values) => {

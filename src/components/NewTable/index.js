@@ -183,6 +183,7 @@ const NewTable = ({
         rowSelection={downloadButton ? rowSelection : null}
         size={'middle'}
         bordered={true}
+        pagination={false}
       />
       {downloadButton && (
         <PDFDownloadLink
@@ -197,7 +198,11 @@ const NewTable = ({
             loading ? (
               'Loading document...'
             ) : (
-              <Button type="primary" icon={<PrinterOutlined />} disabled={!hasSelected}>
+              <Button
+                style={{ marginTop: 16 }}
+                type="primary"
+                icon={<PrinterOutlined />}
+                disabled={!hasSelected}>
                 Download PDF
               </Button>
             )

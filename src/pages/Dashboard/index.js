@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Card, Space, Image, Badge, Divider, Calendar, Row, Col, Statistic, Tooltip } from 'antd';
 import { ArrowUpOutlined } from '@ant-design/icons';
 import { withContext } from '../../contexts/projectContext';
+import IamgeGalery from '../../components/IamgeGalery';
 import dayjs from 'dayjs';
 
 import './index.css';
@@ -198,7 +199,7 @@ const Dashboard = (props) => {
               }>
               <Space direction={'vertical'}>
                 <Badge count={product.number} showZero>
-                  <Image width={60} height={60} src={product.image} />
+                  <IamgeGalery images={product.images} />
                 </Badge>
               </Space>
             </Tooltip>
@@ -207,12 +208,12 @@ const Dashboard = (props) => {
       </Card>
       <Space wrap={true}>
         <Card bordered={false} size={'small'}>
-          <Statistic title="Total Storage Cost" value={totalCost} suffix={`грн`} />
+          <Statistic title="Total Storage Cost" value={+totalCost.toFixed(2)} suffix={`грн`} />
         </Card>
         <Card bordered={false} size={'small'}>
           <Statistic
             title="Storage Profit"
-            value={profit}
+            value={+profit.toFixed(2)}
             suffix={`грн`}
             valueStyle={{ color: '#3f8600' }}
             prefix={<ArrowUpOutlined />}

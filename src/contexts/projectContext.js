@@ -35,6 +35,8 @@ const Provider = ({ children }) => {
     [allOrdersFromDB]
   );
 
+  console.log('here storage', storage);
+  console.log('here allOrders', allOrders);
   return (
     <Context.Provider
       value={{
