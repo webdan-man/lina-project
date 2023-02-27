@@ -67,6 +67,11 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
           <Form.Item name="images" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
             <Upload.Dragger
               name="files"
+              customRequest={({ file, onSuccess }) => {
+                setTimeout(() => {
+                  onSuccess('ok');
+                }, 0);
+              }}
               listType="picture-card"
               fileList={fileList}
               onChange={onChange}

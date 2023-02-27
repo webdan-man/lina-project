@@ -13,6 +13,22 @@ import { db } from '../../db';
 
 const ActionButtons = ({ record, type, confirmButton = false, ...props }) => {
   const handleDelete = async (id) => {
+    if (type === 'orders') {
+      const deleteOrder = await db[type].get({ id });
+
+      const productsFromStorage = await Promise.all(
+        deleteOrder.products.map(({ id }) => db.storage.get({ id }))
+      );
+
+      productsFromStorage.forEach((product) => {
+        const tempProduct = { ...product };
+
+        tempProduct.number = deleteOrder.products.find((item) => item.id === product.id).number;
+
+        db.storage.put(tempProduct);
+      });
+    }
+
     await db[type].delete(id);
   };
 
@@ -159,7 +175,11 @@ const ActionButtons = ({ record, type, confirmButton = false, ...props }) => {
                     noStyle>
                     <Upload.Dragger
                       name="files"
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                      customRequest={({ file, onSuccess }) => {
+                        setTimeout(() => {
+                          onSuccess('ok');
+                        }, 0);
+                      }}
                       listType="picture-card"
                       fileList={fileList}
                       onChange={onChange}

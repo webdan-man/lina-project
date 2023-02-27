@@ -105,7 +105,6 @@ EditableCell.propTypes = {
 };
 
 const MyDoc = ({ data }) => {
-  console.log('here data', data);
   return (
     <Document styles={styles}>
       <Page>
