@@ -3,15 +3,17 @@ import { Button, Image, Modal } from 'antd';
 import NewTable from '../../components/NewTable';
 import { MinusOutlined, UploadOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { withContext } from '../../contexts/projectContext';
-import { db } from '../../db';
+import { doc, updateDoc } from 'firebase/firestore';
+import firestore from '../../firebase';
 
 const History = (props) => {
   const restore = async (record) => {
     const restoreItem = { ...record };
 
-    delete restoreItem.key;
-    delete restoreItem.archivedAt;
-    await db.orders.put({ ...restoreItem });
+    restoreItem.key = null;
+    restoreItem.archivedAt = null;
+
+    await updateDoc(doc(firestore, 'orders', restoreItem.id), { ...restoreItem });
   };
 
   const [open, setOpen] = useState(false);
@@ -54,7 +56,7 @@ const History = (props) => {
         payment + (record.paymentValue ? ` (${record.paymentValue})` : '')
     },
     {
-      title: 'Image',
+      title: 'Confirm Image',
       dataIndex: 'image',
       render: (src) => <Image width={60} height={60} src={src} />
     },

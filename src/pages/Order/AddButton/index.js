@@ -14,9 +14,10 @@ import {
 } from 'antd';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
-import { db } from '../../../db';
 import { withContext } from '../../../contexts/projectContext';
 import { Link } from 'react-router-dom';
+import { addDoc, collection, doc, updateDoc, getDoc } from 'firebase/firestore';
+import firestore from '../../../firebase';
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -71,13 +72,13 @@ const CollectionCreateForm = withContext(({ open, onCreate, onCancel, ...props }
         initialValues={{
           modifier: 'public'
         }}>
-        <Form.Item name="customer" label="Customer">
+        <Form.Item required name="customer" label="Customer">
           <Input />
         </Form.Item>
-        <Form.Item name="description" label="Description">
+        <Form.Item initialValue={null} name="description" label="Description">
           <Input type="textarea" />
         </Form.Item>
-        <Form.Item label="Add product">
+        <Form.Item required label="Add product">
           <Form.List name="products">
             {(fields, { add, remove }) => (
               <>
@@ -145,10 +146,10 @@ const CollectionCreateForm = withContext(({ open, onCreate, onCancel, ...props }
             )}
           </Form.List>
         </Form.Item>
-        <Form.Item label="Order Date" name="orderDate">
+        <Form.Item required label="Order Date" name="orderDate">
           <DatePicker />
         </Form.Item>
-        <Form.Item name="payment" label="Payment type">
+        <Form.Item required name="payment" label="Payment type">
           <Radio.Group onChange={onChange} value={value}>
             <Space direction="vertical">
               <Radio value={'Оплата при отримані'}>Оплата при отримані</Radio>
@@ -157,7 +158,7 @@ const CollectionCreateForm = withContext(({ open, onCreate, onCancel, ...props }
             </Space>
           </Radio.Group>
         </Form.Item>
-        <Form.Item name="paymentValue" label="Payment Value">
+        <Form.Item required name="paymentValue" label="Payment Value">
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
       </Form>
@@ -175,11 +176,20 @@ const AddButton = () => {
   const handleAdd = async (data) => {
     await Promise.all(
       data.products.map(async (product) => {
-        const productItem = await db.storage.get({ id: product.id });
-        return await db.storage.update(product.id, { number: productItem.number - product.number });
+        const docRef = doc(firestore, 'storage', product.id);
+        const docSnap = await getDoc(docRef);
+        const productItem = docSnap.data();
+
+        await updateDoc(doc(firestore, 'storage', product.id), {
+          number: productItem.number - product.number
+        });
       })
     );
-    await db.orders.add({ ...data, orderDate: data.orderDate.format('YYYY-MM-DD') });
+
+    await addDoc(collection(firestore, 'orders'), {
+      ...data,
+      orderDate: data.orderDate.format('YYYY-MM-DD')
+    });
   };
   const [open, setOpen] = useState(false);
   const onCreate = (values) => {

@@ -2,7 +2,8 @@ import { Button, Form, Input, Modal, Upload, InputNumber } from 'antd';
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
-import { db } from '../../../db';
+import { collection, addDoc } from 'firebase/firestore';
+import firestore from '../../../firebase';
 
 const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
   const [form] = Form.useForm();
@@ -81,22 +82,22 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
             </Upload.Dragger>
           </Form.Item>
         </Form.Item>
-        <Form.Item name="name" label="Name">
+        <Form.Item required name="name" label="Name">
           <Input />
         </Form.Item>
-        <Form.Item name="description" label="Description">
+        <Form.Item initialValue={null} name="description" label="Description">
           <Input type="textarea" />
         </Form.Item>
-        <Form.Item name="cost" label="Cost">
+        <Form.Item required name="cost" label="Cost">
           <InputNumber addonAfter="грн" />
         </Form.Item>
-        <Form.Item name="number" label="Number">
+        <Form.Item required name="number" label="Number">
           <InputNumber />
         </Form.Item>
-        <Form.Item name="price" label="Price" type="number">
+        <Form.Item required name="price" label="Price" type="number">
           <InputNumber addonAfter="грн" />
         </Form.Item>
-        <Form.Item name="link" label="Link product">
+        <Form.Item initialValue={null} name="link" label="Link product">
           <Input />
         </Form.Item>
       </Form>
@@ -112,20 +113,20 @@ CollectionCreateForm.propTypes = {
 
 const AddButton = () => {
   const handleAdd = async (data) => {
-    const file = data.images;
+    const images = data.images
+      ? await Promise.all(
+          data.images.map(
+            (file) =>
+              new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file.originFileObj);
+                reader.onload = () => resolve(reader.result);
+              })
+          )
+        )
+      : null;
 
-    const images = await Promise.all(
-      data.images.map(
-        (file) =>
-          new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file.originFileObj);
-            reader.onload = () => resolve(reader.result);
-          })
-      )
-    );
-
-    await db.storage.add({ ...data, images: images });
+    await addDoc(collection(firestore, 'storage'), { ...data, images: images });
   };
   const [open, setOpen] = useState(false);
   const onCreate = (values) => {

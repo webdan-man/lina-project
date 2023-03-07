@@ -4,9 +4,10 @@ import { Image, Typography } from 'antd';
 import AddButton from './AddButton';
 import ActionButtons from '../../components/ActionButtons';
 import { withContext } from '../../contexts/projectContext';
-import { db } from '../../db';
 import { MinusOutlined } from '@ant-design/icons';
 import IamgeGalery from '../../components/IamgeGalery';
+import { doc, updateDoc } from 'firebase/firestore';
+import firestore from '../../firebase';
 
 const { Link } = Typography;
 
@@ -64,11 +65,7 @@ const Storage = (props) => {
   ];
 
   const handleSave = async (row) => {
-    const item = await db.storage.get({ id: row.id });
-    db.storage.put({
-      ...item,
-      ...row
-    });
+    await updateDoc(doc(firestore, 'storage', row.id), { ...row });
   };
 
   return (

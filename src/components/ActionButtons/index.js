@@ -1,41 +1,47 @@
 import React, { useState } from 'react';
 import { Button, Dropdown, Form, Image, Input, Modal, Upload } from 'antd';
-import {
-  CheckOutlined,
-  CopyOutlined,
-  DeleteOutlined,
-  MenuOutlined,
-  PrinterOutlined
-} from '@ant-design/icons';
+import { CheckOutlined, CopyOutlined, DeleteOutlined, MenuOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import { withContext } from '../../contexts/projectContext';
-import { db } from '../../db';
+import { doc, getDoc, updateDoc, deleteDoc, addDoc, collection } from 'firebase/firestore';
+import firestore from '../../firebase';
 
 const ActionButtons = ({ record, type, confirmButton = false, ...props }) => {
   const handleDelete = async (id) => {
     if (type === 'orders') {
-      const deleteOrder = await db[type].get({ id });
+      const docRef = doc(firestore, type, id);
+      const docSnap = await getDoc(docRef);
+      const deleteOrder = docSnap.data();
 
       const productsFromStorage = await Promise.all(
-        deleteOrder.products.map(({ id }) => db.storage.get({ id }))
+        deleteOrder.products.map(async ({ id }) => {
+          const docRef = doc(firestore, 'storage', id);
+          const docSnap = await getDoc(docRef);
+          return docSnap.data();
+        })
       );
 
-      productsFromStorage.forEach((product) => {
-        const tempProduct = { ...product };
+      await Promise.all(
+        productsFromStorage.map(async (product) => {
+          const tempProduct = { ...product };
 
-        tempProduct.number = deleteOrder.products.find((item) => item.id === product.id).number;
+          tempProduct.number = deleteOrder.products.find((item) => item.id === product.id).number;
 
-        db.storage.put(tempProduct);
-      });
+          return await updateDoc(doc(firestore, 'storage', tempProduct.id), { ...tempProduct });
+        })
+      );
     }
 
-    await db[type].delete(id);
+    await deleteDoc(doc(firestore, type, id));
   };
 
   const handleCopy = async (record) => {
     delete record.id;
     delete record.key;
-    await db[type].add(record);
+
+    await addDoc(collection(firestore, type), {
+      ...record
+    });
   };
 
   const onConfirm = async (record, data) => {
@@ -46,7 +52,13 @@ const ActionButtons = ({ record, type, confirmButton = false, ...props }) => {
       reader.readAsDataURL(file.originFileObj);
       reader.onload = () => resolve(reader.result);
     });
-    await db[type].put({ ...record, ...data, image: src, archivedAt: Date.now() });
+
+    await updateDoc(doc(firestore, type, record.id), {
+      ...record,
+      ...data,
+      image: src,
+      archivedAt: Date.now()
+    });
   };
 
   const [open, setOpen] = useState(false);
@@ -167,7 +179,7 @@ const ActionButtons = ({ record, type, confirmButton = false, ...props }) => {
                 initialValues={{
                   modifier: 'public'
                 }}>
-                <Form.Item label="Image">
+                <Form.Item required label="Image">
                   <Form.Item
                     name="image"
                     valuePropName="fileList"
@@ -188,7 +200,10 @@ const ActionButtons = ({ record, type, confirmButton = false, ...props }) => {
                     </Upload.Dragger>
                   </Form.Item>
                 </Form.Item>
-                <Form.Item name="confirmDescription" label="Confirm description">
+                <Form.Item
+                  initialValue={null}
+                  name="confirmDescription"
+                  label="Confirm description">
                   <Input type="textarea" />
                 </Form.Item>
               </Form>

@@ -189,6 +189,7 @@ const Dashboard = (props) => {
         <Space split={<Divider type="vertical" />} wrap>
           {sortingProducts.sort().map((product) => (
             <Tooltip
+              key={product.id}
               color={'magenta'}
               title={
                 <Space direction={'vertical'}>

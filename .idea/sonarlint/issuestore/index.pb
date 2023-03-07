@@ -17,21 +17,23 @@ G
 public/site.webmanifest,8/7/876bec5140248dc268b8bf1095c9e93c9853c06b
 ;
 .prettierrc,2/0/20137a9e94744624390b6748bc96df5ca1579b71
-A
-package-lock.json,f/a/fa288d1472d29beccb489a676f68739ad365fc47
 Q
 !src/components/NewTable/index.css,f/9/f99e49d3a8d22e2d2da66f2a2e5118e12c9fe14b
 <
 .eslintrc.js,d/b/dbc0c31823b8f2e4ed04a397722fed33a67f123f
 ?
 craco.config.js,d/c/dc8684dd9b1371aee46724f40001122dc551e063
-T
-$src/pages/Storage/AddButton/index.js,1/e/1ea6b5e5eda89b4d7e047b920acadbb2fe335f49
 <
 src/index.js,f/9/f900edc44cb929c2267a16100a32851f6d5b477d
-B
-public/electron.js,5/3/53603e0bf2afa65eb3ad78bd2100a92ea264dbd9
 8
 .babelrc,b/c/bcac7464521b8c19a2372c739f6dc9e9ab7dfc80
 A
 public/index.html,f/4/f43ecdf8d666ee908aacce037b4cd72159e4741b
+M
+src/pages/Dashboard/index.css,a/a/aa4511fe7f043797dbcee0a09e1dd8367700ab8e
+6
+run.sh,3/2/324fcb49f1cf313ebdd7cbda6a71b73727ddd94d
+;
+src/App.css,a/a/aa7165aefcf8ee3d73539e99ab007daf1aa18d8d
+F
+src/reportWebVitals.js,1/c/1ce5e63ae1582ed0b425c46001299a07515efbf9

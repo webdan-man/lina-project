@@ -4,9 +4,10 @@ import AddButton from './AddButton';
 import ActionButtons from '../../components/ActionButtons';
 import { withContext } from '../../contexts/projectContext';
 import { Space, Tooltip } from 'antd';
-import { db } from '../../db';
 import { MinusOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import { doc, updateDoc } from 'firebase/firestore';
+import firestore from '../../firebase';
 
 const Order = (props) => {
   const defaultColumns = [
@@ -28,7 +29,7 @@ const Order = (props) => {
               if (!item) return <MinusOutlined />;
 
               return (
-                <Tooltip title={`На складі ${item.number}`}>
+                <Tooltip key={product.id} title={`На складі ${item.number}`}>
                   <span
                     style={{
                       cursor: 'pointer'
@@ -64,11 +65,7 @@ const Order = (props) => {
   ];
 
   const handleSave = async (row) => {
-    const item = await db.orders.get({ id: row.id });
-    db.orders.put({
-      ...item,
-      ...row
-    });
+    await updateDoc(doc(firestore, 'orders', row.id), { ...row });
   };
 
   return (

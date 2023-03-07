@@ -30,7 +30,7 @@ const IamgeGalery = ({ images }) => {
             onVisibleChange: (vis) => setVisible(vis)
           }}>
           {images.map((src) => (
-            <Image width={60} height={60} src={src} />
+            <Image width={60} height={60} src={src} key={src} />
           ))}
         </Image.PreviewGroup>
       </div>

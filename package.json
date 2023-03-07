@@ -2,7 +2,6 @@
   "name": "lina-project",
   "version": "0.1.0",
   "productName": "Stickers-and-HairBands-Shop",
-  "main": "public/electron.js",
   "private": true,
   "homepage": "",
   "dependencies": {
@@ -15,9 +14,7 @@
     "antd-img-crop": "^4.6.0",
     "babel-preset-react-app": "^10.0.1",
     "dayjs": "^1.11.7",
-    "dexie": "^3.2.3",
-    "dexie-react-hooks": "^1.1.1",
-    "instagram-profile-get": "^1.0.3",
+    "firebase": "^9.17.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -33,10 +30,7 @@
     "test": "craco test",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-    "start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
-    "package": "electron-builder build --mac --win -c.extraMetadata.main=build/electron.js --publish never",
-    "publish": "electron-builder build --mac --win --publish always"
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": [
@@ -62,40 +56,9 @@
     ]
   },
   "devDependencies": {
-    "electron": "^23.0.0",
-    "electron-builder": "^23.6.0",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.4"
-  },
-  "build": {
-    "mac": {
-      "publish": {
-        "provider": "github",
-        "owner": "webdan-man",
-        "repo": "lina-project",
-        "private": true,
-        "token": "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"
-      }
-    },
-    "win": {
-      "publish": {
-        "provider": "github",
-        "owner": "webdan-man",
-        "repo": "lina-project",
-        "private": true,
-        "token": "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"
-      }
-    },
-    "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
-    "publish": {
-      "provider": "github",
-      "private": true,
-      "owner": "webdan-man"
-    }
   }
 }
