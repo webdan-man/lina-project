@@ -46,3 +46,7 @@ A
 package-lock.json,f/a/fa288d1472d29beccb489a676f68739ad365fc47
 9
 	yarn.lock,5/3/53585a096fe3a3b96321113856ae62602995a33b
+T
+$src/pages/Storage/AddButton/index.js,1/e/1ea6b5e5eda89b4d7e047b920acadbb2fe335f49
+L
+src/pages/Dashboard/index.js,d/1/d1b05924ebebb2fe877f6cd192f8bc71ab4f96b2
