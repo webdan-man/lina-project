@@ -184,7 +184,7 @@ const NewTable = ({
         bordered={true}
         pagination={false}
         scroll={{
-          x: 1500
+          x: 1000
         }}
       />
       {downloadButton && (

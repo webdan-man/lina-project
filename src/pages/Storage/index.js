@@ -62,8 +62,7 @@ const Storage = (props) => {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_, record) => <ActionButtons record={record} type={'storage'} />,
-      width: 100
+      render: (_, record) => <ActionButtons record={record} type={'storage'} />
     }
   ];
 

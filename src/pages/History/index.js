@@ -70,7 +70,6 @@ const History = (props) => {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      width: 100,
       render: (_, record) => (
         <>
           <Button type="link" icon={<UploadOutlined />} onClick={showModal}>

@@ -61,8 +61,7 @@ const Order = (props) => {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_, record) => <ActionButtons record={record} confirmButton={true} type="orders" />,
-      width: 100
+      render: (_, record) => <ActionButtons record={record} confirmButton={true} type="orders" />
     }
   ];
 
