@@ -16,12 +16,14 @@ const Storage = (props) => {
     {
       title: 'Image',
       dataIndex: 'images',
-      render: (images) => <IamgeGalery images={images} />
+      render: (images) => <IamgeGalery images={images} />,
+      fixed: 'left'
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      editable: true
+      editable: true,
+      fixed: 'left'
     },
     {
       title: 'Description',
@@ -60,7 +62,8 @@ const Storage = (props) => {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_, record) => <ActionButtons record={record} type={'storage'} />
+      render: (_, record) => <ActionButtons record={record} type={'storage'} />,
+      width: 100
     }
   ];
 

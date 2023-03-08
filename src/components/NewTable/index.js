@@ -183,6 +183,9 @@ const NewTable = ({
         size={'middle'}
         bordered={true}
         pagination={false}
+        scroll={{
+          x: 1500
+        }}
       />
       {downloadButton && (
         <PDFDownloadLink

@@ -14,7 +14,8 @@ const Order = (props) => {
     {
       title: 'Customer',
       dataIndex: 'customer',
-      editable: true
+      editable: true,
+      fixed: 'left'
     },
     {
       title: 'Products',
@@ -60,7 +61,8 @@ const Order = (props) => {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_, record) => <ActionButtons record={record} confirmButton={true} type="orders" />
+      render: (_, record) => <ActionButtons record={record} confirmButton={true} type="orders" />,
+      width: 100
     }
   ];
 

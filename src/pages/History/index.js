@@ -29,7 +29,8 @@ const History = (props) => {
   const defaultColumns = [
     {
       title: 'Customer',
-      dataIndex: 'customer'
+      dataIndex: 'customer',
+      fixed: 'left'
     },
     {
       title: 'Description',
@@ -69,6 +70,7 @@ const History = (props) => {
     {
       title: 'Actions',
       dataIndex: 'actions',
+      width: 100,
       render: (_, record) => (
         <>
           <Button type="link" icon={<UploadOutlined />} onClick={showModal}>
